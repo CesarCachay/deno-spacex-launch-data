@@ -23,7 +23,7 @@ await log.setup({
 
 const launches = new Map<number, Launch>();
 
-const downloadLaunchData = async () => {
+export const downloadLaunchData = async () => {
   log.info('Downloading launch data ...');
   // log.warning('THIS IS WARNING!'); // it's shown when is warning or debug
   const response = await fetch('https://api.spacexdata.com/v3/launches', {
@@ -68,4 +68,10 @@ const downloadLaunchData = async () => {
   }
 };
 
-await downloadLaunchData();
+// The log.info will be shown on the console when is runned in the mod.ts
+// In case the exported function is runned in other file won't show the log.info
+if (import.meta.main) {
+  await downloadLaunchData();
+  log.info(JSON.stringify(import.meta));
+  log.info(`Downloaded data for ${launches.size} SpaceX launches.`);
+};
